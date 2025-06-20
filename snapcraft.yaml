@@ -1,0 +1,27 @@
+name: snap-rmq
+base: core22
+version: '1.0.0'
+summary: A self-contained C# RabbitMQ producer
+description: |
+  Snap for a standalone C# RabbitMQ producer service.
+
+grade: stable
+confinement: strict
+
+parts:
+  snap-rmq:
+    plugin: dump
+    source: rmqSnap/publish
+    stage-packages:
+      - libicu70  # 🔁 required ICU library
+    organize:
+      rmqSnap: bin/rmqSnap
+    override-build: |
+      chmod +x rmqSnap
+      snapcraftctl build
+
+apps:
+  snap-rmq:
+    command: bin/rmqSnap
+    plugs:
+      - network
